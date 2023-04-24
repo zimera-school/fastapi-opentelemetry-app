@@ -6,7 +6,13 @@ services:
       - "8000:8000"
     depends_on:
       - postgres
+      - jaeger
     network_mode: "host"
+    environment:
+      - OTEL_SERVICE_NAME=fastapi-app
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:14250
+      - OTEL_EXPORTER_OTLP_PROTOCOL=grpc
+
   postgres:
     image: postgres:15.2
     restart: unless-stopped
@@ -24,4 +30,22 @@ services:
       #- ./postgres-data:/var/lib/postgresql/data
       - /var/lib/postgresql/data
       # copy the sql script to create tables
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql
+  jaeger:
+    image: jaegertracing/all-in-one:1.44
+    ports:
+      - "16686:16686"
+      - "14250:14250"
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
+      - LOG_LEVEL=debug
+  otel-collector:
+    image: otel/opentelemetry-collector:latest
+    command: ["--config=/etc/otel-collector-config.yaml"]
+    volumes:
+      - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml:Z
+    ports:
+      - "13133:13133" # Health_check extension
+      - "4317:4317"   # OTLP gRPC receiver
+    depends_on:
+      - jaeger

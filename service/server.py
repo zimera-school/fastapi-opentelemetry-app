@@ -6,7 +6,7 @@ from routes.organization import Org
 from routes.healthcheck import Healthcheck
 
 app = FastAPI()
-FastAPIInstrumentor.instrument_app(app)
+FastAPIInstrumentor.instrument_app(app, excluded_urls="/healthcheck")
 
 origins = [
     "http://localhost:3000",
