@@ -17,15 +17,8 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- Name: uuid-ossp; Type: EXTENSION; Schema: -; Owner: -
---
-
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp" WITH SCHEMA public;
 
-
---
--- Name: EXTENSION "uuid-ossp"; Type: COMMENT; Schema: -; Owner: 
---
 
 COMMENT ON EXTENSION "uuid-ossp" IS 'generate universally unique identifiers (UUIDs)';
 
@@ -33,10 +26,6 @@ COMMENT ON EXTENSION "uuid-ossp" IS 'generate universally unique identifiers (UU
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
-
---
--- Name: organization; Type: TABLE; Schema: public; Owner: umohio
---
 
 CREATE TABLE public.organization (
     organization_id integer NOT NULL,
@@ -47,11 +36,7 @@ CREATE TABLE public.organization (
 );
 
 
-ALTER TABLE public.organization OWNER TO umohio;
-
---
--- Name: organization_organization_id_seq; Type: SEQUENCE; Schema: public; Owner: umohio
---
+ALTER TABLE public.organization OWNER TO postgres;
 
 CREATE SEQUENCE public.organization_organization_id_seq
     AS integer
@@ -62,46 +47,23 @@ CREATE SEQUENCE public.organization_organization_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.organization_organization_id_seq OWNER TO umohio;
-
---
--- Name: organization_organization_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: umohio
---
+ALTER TABLE public.organization_organization_id_seq OWNER TO postgres;
 
 ALTER SEQUENCE public.organization_organization_id_seq OWNED BY public.organization.organization_id;
 
-
---
--- Name: organization organization_id; Type: DEFAULT; Schema: public; Owner: umohio
---
-
 ALTER TABLE ONLY public.organization ALTER COLUMN organization_id SET DEFAULT nextval('public.organization_organization_id_seq'::regclass);
 
-
---
--- Data for Name: organization; Type: TABLE DATA; Schema: public; Owner: umohio
---
 
 COPY public.organization (organization_id, name, tagline, website, email) FROM stdin;
 1	The Corporation	Here is our tagline	https://web.com	info@web.com
 2	The Second Corporation	The second tagline	http://web2.com	info@web2.com
 \.
 
-
---
--- Name: organization_organization_id_seq; Type: SEQUENCE SET; Schema: public; Owner: umohio
---
-
 SELECT pg_catalog.setval('public.organization_organization_id_seq', 2, true);
 
 
---
--- Name: organization organization_pkey; Type: CONSTRAINT; Schema: public; Owner: umohio
---
-
 ALTER TABLE ONLY public.organization
     ADD CONSTRAINT organization_pkey PRIMARY KEY (organization_id);
-
 
 --
 -- PostgreSQL database dump complete
