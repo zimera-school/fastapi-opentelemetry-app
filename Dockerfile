@@ -1,0 +1,17 @@
+FROM python:3.11
+
+RUN mkdir /service
+WORKDIR /service
+COPY service/ /service/
+RUN pip install pip -U
+
+COPY ./requirements.txt /usr/src/requirements.txt
+RUN pip install --no-cache-dir -r /usr/src/requirements.txt
+
+EXPOSE 8000
+
+# Use the ping endpoint as a healthcheck,
+# so Docker knows if the API is still running ok or needs to be restarted
+HEALTHCHECK --interval=21s --timeout=3s --start-period=10s CMD curl --fail http://localhost:8000/healthcheck || exit 1
+
+CMD ["uvicorn", "server:app", "--host", "0.0.0.0", "--port", "8000"]

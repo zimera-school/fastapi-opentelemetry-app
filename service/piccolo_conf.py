@@ -7,8 +7,8 @@ extensions = ["uuid-ossp"]
 DB = PostgresEngine(
     config={
         "database": "fastapidb",
-        "user": "umohio",
-        "password": "pmohio",
+        "user": "postgres",
+        "password": "postgres",
         "host": "localhost",
         "port": 5432,
     }

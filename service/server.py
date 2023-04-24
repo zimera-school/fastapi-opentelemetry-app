@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
 
 from routes.organization import Org
+from routes.healthcheck import Healthcheck
 
 app = FastAPI()
 FastAPIInstrumentor.instrument_app(app)
@@ -21,5 +22,7 @@ app.add_middleware(
 )
 
 organization = Org()
+healthcheck = Healthcheck()
 
 app.include_router(organization.router)
+app.include_router(healthcheck.router)
