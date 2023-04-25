@@ -11,6 +11,7 @@ services:
     environment:
       - OTEL_RESOURCE_ATTRIBUTES="service.name=fastapiApp"
 #      - OTEL_EXPORTER_JAEGER_ENDPOINT=http://jaeger-all-in-one:14268/api/traces
+      - OTEL_EXPORTER_OTLP_ENDPOINT=jaeger-all-in-one:14268
   pgdbhost:
     image: postgres:15.2
     restart: unless-stopped
@@ -52,7 +53,10 @@ services:
       - LOG_LEVEL=warn
 #      - REPORTER_GRPC_HOST_PORT=jaeger-all-in-one:16685
       - MEMORY_MAX_TRACES=100000
-      - COLLECTOR_GRPC_SERVER_HOST_PORT=otel-collector:4317
+      - SPAN_STORAGE_TYPE=badger
+      - BADGER_EPHEMERAL=false
+      - BADGER_DIRECTORY_VALUE=/badger/data
+      - BADGER_DIRECTORY_KEY=/badger/key
   otel-collector:
     image: otel/opentelemetry-collector:0.75.0
     command: ["--config=/etc/otel-collector-config.yaml"]

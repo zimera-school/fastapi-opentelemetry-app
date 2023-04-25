@@ -10,6 +10,6 @@ RUN pip install --no-cache-dir -r /usr/src/requirements.txt
 
 EXPOSE 8000
 
-HEALTHCHECK --interval=21s --timeout=3s --start-period=10s CMD curl --fail http://localhost:8000/healthcheck || exit 1
+HEALTHCHECK --interval=21s --timeout=3s --start-period=10s CMD curl --fail http://web:8000/healthcheck || exit 1
 
-CMD ["uvicorn", "server:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "server:app", "--host", "web", "--port", "8000"]

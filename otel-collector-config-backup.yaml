@@ -10,9 +10,8 @@ receivers:
   otlp:
     protocols:
       grpc:
-        endpoint: "jaeger-all-in-one:4317"
+        endpoint: otel-collector:4317
 #      http:
-#        endpoint: otel-collector:4318
 #        cors:
 #          allowed_origins:
 #            - "http://*"
@@ -25,7 +24,7 @@ processors:
     send_batch_max_size: 11000
 exporters:
   otlp:
-    endpoint: "jaeger-all-in-one:4317"
+    endpoint: jaeger-all-in-one:4317
     tls:
       insecure: true
     sending_queue:
