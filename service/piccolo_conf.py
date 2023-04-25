@@ -9,7 +9,7 @@ DB = PostgresEngine(
         "database": "fastapidb",
         "user": "postgres",
         "password": "postgres",
-        "host": "localhost",
+        "host": "pgdbhost",
         "port": 5432,
     }
 )

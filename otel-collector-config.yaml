@@ -1,25 +1,38 @@
 receivers:
+  jaeger:
+    protocols:
+      grpc:
+        endpoint: jaeger-all-in-one:14250
+      thrift_compact:
+        endpoint: jaeger-all-in-one:6831
+      thrift_http:
+        endpoint: jaeger-all-in-one:14268  
   otlp:
     protocols:
       grpc:
-        endpoint: "0.0.0.0:4317"
+        endpoint: otel-collector:4317
+      http:
+        endpoint: otel-collector:4318
 processors:
   batch:
     send_batch_size: 1024
     timeout: 5s
 exporters:
-  logging:
-    loglevel: debug
-  otlp:
-    endpoint: "0.0.0.0:14250"
+  jaeger:
+    endpoint: jaeger-all-in-one:14250
     tls:
       insecure: true
     sending_queue:
       num_consumers: 4
       queue_size: 100
+extensions:
+  health_check:
+  pprof:
+  zpages:
 service:
+  extensions: [pprof, zpages, health_check]
   pipelines:
     traces:
-      receivers: [otlp]
+      receivers: [otlp,jaeger]
       processors: [batch]
-      exporters: [logging, otlp]
+      exporters: [jaeger]

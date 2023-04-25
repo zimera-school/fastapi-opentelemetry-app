@@ -8,6 +8,7 @@ from routes.healthcheck import Healthcheck
 app = FastAPI()
 FastAPIInstrumentor.instrument_app(app, excluded_urls="/healthcheck")
 
+"""
 origins = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
@@ -20,7 +21,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
+"""
 organization = Org()
 healthcheck = Healthcheck()
 
